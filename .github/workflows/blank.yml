@@ -33,6 +33,6 @@ jobs:
           unzip payara-7.2025.2.zip -d nanos-root   
           
       - name: Load
-        run: |
-          ops pkg load AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c config.json --target-root nanos-root
-    
+        run: |          
+          cd nanos-root/payara
+          ops pkg load AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c ../../config.json
