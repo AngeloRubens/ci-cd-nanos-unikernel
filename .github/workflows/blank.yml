@@ -39,7 +39,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-system-x86_64 unzip wget tar
+          sudo apt-get install -y qemu-system unzip wget tar
 
       # Install ops
       - name: Install ops (NanoVMs)
