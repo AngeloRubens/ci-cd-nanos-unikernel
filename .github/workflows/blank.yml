@@ -34,5 +34,5 @@ jobs:
           
       - name: Load
         run: |          
-          cd nanos-root/payara
+          cd nanos-root/payara7
           ops pkg load AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c ../../config.json
