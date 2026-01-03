@@ -103,5 +103,5 @@ jobs:
       - name: Upload Nanos image artifact
         uses: actions/upload-artifact@v4
         with:
-          name: $IMAGE_TAG
-          path: $HOME/.ops/images/$IMAGE_TAG
+          name: ${IMAGE_TAG}
+          path: $HOME/.ops/images/${IMAGE_TAG}
