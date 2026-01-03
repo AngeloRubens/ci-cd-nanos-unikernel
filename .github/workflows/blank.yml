@@ -104,4 +104,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nanos-image-${{ env.IMAGE_TAG }}
-          path: ${{ env.IMAGE_PATH }}
+          path: $HOME/.ops/images/*
