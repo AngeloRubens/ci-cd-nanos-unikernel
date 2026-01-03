@@ -101,7 +101,19 @@ jobs:
           echo "IMAGE_PATH=$HOME/.ops/images/$IMAGE_TAG" >> $GITHUB_ENV
       # Upload artifact
       - name: Upload Nanos image artifact
+        run: |
+          IMAGE_DIR="$HOME/.ops/images"
+          if [ -z "$(ls -A $IMAGE_DIR)" ]; then
+            echo "Error: no images found in $IMAGE_DIR. Upload failed."
+            exit 1
+          fi
+      
+          echo "Uploading image(s) from $IMAGE_DIR"
+          ls -lh $IMAGE_DIR
+
+      # Upload step separato
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: nanos-image-${{ env.IMAGE_TAG }}
+          name: nanos-image
           path: $HOME/.ops/images/*
