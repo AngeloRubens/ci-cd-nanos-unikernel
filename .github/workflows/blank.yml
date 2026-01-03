@@ -27,3 +27,8 @@ jobs:
       - name: Verify ops installation
         run: |
           ops version
+          
+      - name: Show config.json
+        run: |
+          ls -l
+          cat config.json    
