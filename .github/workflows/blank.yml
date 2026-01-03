@@ -27,8 +27,12 @@ jobs:
       - name: Verify ops installation
         run: |
           ops version
-          
-      - name: Show config.json
+      - name: Download Payara 7.2025.2
         run: |
-          ls -l
-          cat config.json    
+          wget -O payara-7.2025.2.zip https://nexus.payara.fish/repository/payara-community/fish/payara/distributions/payara/7.2025.2/payara-7.2025.2.zip
+          unzip payara-7.2025.2.zip -d nanos-root   
+          
+      - name: Load
+        run: |
+          ops pkg load AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c config.json --target-root nanos-root
+    
