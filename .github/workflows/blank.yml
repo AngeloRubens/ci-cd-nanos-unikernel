@@ -1,46 +1,82 @@
-name: Build Payara Nanos Image
+name: Nanos Image Factory
 
 on:
   workflow_dispatch:
+    inputs:
+      # URL del server (zip o tar.gz)
+      as_url:
+        description: 'Application Server archive URL (.zip or .tar.gz)'
+        required: true
+        default: 'https://nexus.payara.fish/repository/payara-community/fish/payara/distributions/payara/7.2025.2/payara-7.2025.2.zip'
+
+      # Nome server per tag
+      as_name:
+        description: 'Name of the Application Server (for tagging)'
+        required: true
+        default: 'payara'
+
+      # Java package completo ops
+      java_package:
+        description: 'Java runtime package (ops package)'
+        type: choice
+        required: true
+        default: 'AngeloRubens/AzulJREx64Linux:25.0.1'
+        options:
+          - 'AngeloRubens/AzulJREx64Linux:25.0.1'
+          - 'AngeloRubens/AzulJREx64Linux:21.0.5'
+          - 'AngeloRubens/AzulJREx64Linux:17.0.13'
 
 jobs:
   build:
     runs-on: ubuntu-22.04
 
     steps:
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Install system dependencies
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-system-x86_64 unzip
+          sudo apt-get install -y qemu-system-x86_64 unzip wget tar
 
+      # 3️⃣ Install ops
       - name: Install ops (NanoVMs)
         run: |
           curl -L https://ops.city/get.sh | sh
 
+      # 4️⃣ Add ops to PATH
       - name: Add ops to PATH
         run: |
           echo "$HOME/.ops/bin" >> $GITHUB_PATH
 
+      # 5️⃣ Verify ops installation
       - name: Verify ops installation
         run: |
           ops version
 
-      - name: Download & extract Payara (dynamic dir)
+      # 6️⃣ Download & extract AS
+      - name: Download & extract Application Server
         run: |
-          mkdir -p nanos-root payara-tmp
+          AS_URL="${{ inputs.as_url }}"
+          mkdir -p nanos-root as-tmp
+          wget -O as-package "$AS_URL"
 
-          wget -O payara.zip https://nexus.payara.fish/repository/payara-community/fish/payara/distributions/payara/7.2025.2/payara-7.2025.2.zip
-          unzip -q payara.zip -d payara-tmp
+          if [[ "$AS_URL" == *.zip ]]; then
+              unzip -q as-package -d as-tmp
+          elif [[ "$AS_URL" == *.tar.gz ]]; then
+              tar -xzf as-package -C as-tmp
+          else
+              echo "Unsupported archive format"; exit 1
+          fi
 
-          PAYARA_DIR=$(find payara-tmp -mindepth 1 -maxdepth 1 -type d)
-          [ -n "$PAYARA_DIR" ] || { echo "Payara dir not found"; exit 1; }
+          AS_DIR=$(find as-tmp -mindepth 1 -maxdepth 1 -type d)
+          [ -n "$AS_DIR" ] || { echo "Application Server directory not found"; exit 1; }
+          mv "$AS_DIR"/* nanos-root/
 
-          mv "$PAYARA_DIR"/* nanos-root/
-
-      - name: Create /etc/hosts for Nanos
+      # 7️⃣ Create /etc/hosts
+      - name: Create /etc/hosts
         run: |
           mkdir -p nanos-root/etc
           cat > nanos-root/etc/hosts <<'EOF'
@@ -48,11 +84,24 @@ jobs:
 10.0.2.15 10-0-2-15
 EOF
 
-      - name: Build Nanos image (Payara + Azul)
+      # 8️⃣ Build Nanos image
+      - name: Build Nanos image
         run: |
+          IMAGE_TAG="${{ inputs.as_name }}-jre$(
+            echo "${{ inputs.java_package }}" | cut -d: -f2
+          )"
           cd nanos-root
+          echo "Building image: $IMAGE_TAG"
+
           ops image create \
-            --imagename payara \
-            --package AngeloRubens/AzulJREx64Linux:25.0.1 \
+            --imagename "$IMAGE_TAG" \
+            --package "${{ inputs.java_package }}" \
             --nightly \
             -c ../config.json
+
+      # 9️⃣ Upload artifact
+      - name: Upload Nanos image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nanos-image-${{ inputs.as_name }}-${{ inputs.java_package }}
+          path: $HOME/.ops/images/
