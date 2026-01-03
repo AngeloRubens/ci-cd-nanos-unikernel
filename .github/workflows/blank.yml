@@ -6,6 +6,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+
     steps:
-      - name: Hello
-        run: echo "GitHub Actions funziona"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install ops (NanoVMs)
+        run: |
+          curl -L https://ops.city/get.sh | sh
+          sudo mv ops /usr/local/bin/ops
+
+      - name: Verify ops installation
+        run: |
+          ops version
