@@ -42,13 +42,13 @@ jobs:
       
       - name: Create /etc/hosts for Nanos      
         run: |
-          mkdir -p nanos-root/payara7/etc
-          cat > nanos-root/payara7/etc/hosts <<'EOF'
+          mkdir -p nanos-root/etc
+          cat > nanos-root/etc/hosts <<'EOF'
                 127.0.0.1 localhost
                 10.0.2.15 10-0-2-15
                 EOF
     
       - name: Load
         run: |          
-          cd nanos-root/payara7
-          ops image create --imagename payara --package AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c ../../config.json
+          cd nanos-root
+          ops image create --imagename payara --package AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c ../config.json
