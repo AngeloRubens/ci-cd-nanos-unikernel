@@ -116,4 +116,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nanos-image
-          path: $HOME/.ops/images/*
+          path: /home/runner/.ops/images/*
