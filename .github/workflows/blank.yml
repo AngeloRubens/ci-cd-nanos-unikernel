@@ -31,7 +31,14 @@ jobs:
         run: |
           wget -O payara-7.2025.2.zip https://nexus.payara.fish/repository/payara-community/fish/payara/distributions/payara/7.2025.2/payara-7.2025.2.zip
           unzip payara-7.2025.2.zip -d nanos-root   
-          
+            - name: Create /etc/hosts for Nanos
+        run: |
+          mkdir -p nanos-root/payara7/etc
+          cat > nanos-root/payara7/etc/hosts <<'EOF'
+                127.0.0.1 localhost
+                10.0.2.15 10-0-2-15
+                EOF
+    
       - name: Load
         run: |          
           cd nanos-root/payara7
