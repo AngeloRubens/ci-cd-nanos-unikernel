@@ -27,10 +27,19 @@ jobs:
       - name: Verify ops installation
         run: |
           ops version
-      - name: Download Payara 7.2025.2
+
+      - name: Download & extract Payara (dynamic dir)
         run: |
-          wget -O payara-7.2025.2.zip https://nexus.payara.fish/repository/payara-community/fish/payara/distributions/payara/7.2025.2/payara-7.2025.2.zip
-          unzip payara-7.2025.2.zip -d nanos-root   
+          mkdir -p nanos-root
+          mkdir -p payara-tmp
+      
+          wget -O payara.zip https://nexus.payara.fish/repository/payara-community/fish/payara/distributions/payara/7.2025.2/payara-7.2025.2.zip
+          unzip -q payara.zip -d payara-tmp
+      
+          # move *content* of first-level directory into nanos-root
+          PAYARA_DIR=$(find payara-tmp -mindepth 1 -maxdepth 1 -type d | head -n 1)
+          mv "$PAYARA_DIR"/* nanos-root/
+      
       - name: Create /etc/hosts for Nanos      
         run: |
           mkdir -p nanos-root/payara7/etc
@@ -42,4 +51,4 @@ jobs:
       - name: Load
         run: |          
           cd nanos-root/payara7
-          ops pkg load AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c ../../config.json
+          ops image create --imagename payara --package AngeloRubens/AzulJREx64Linux:25.0.1 --nightly -c ../../config.json
