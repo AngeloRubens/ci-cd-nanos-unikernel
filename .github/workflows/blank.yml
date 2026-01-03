@@ -98,10 +98,10 @@ jobs:
             --package "${{ inputs.java_package }}" \
             --nightly \
             -c ../config.json
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
+          echo "IMAGE_PATH=$HOME/.ops/images/$IMAGE_TAG" >> $GITHUB_ENV
       # Upload artifact
       - name: Upload Nanos image artifact
         uses: actions/upload-artifact@v4
         with:
           name: nanos-image-${{ env.IMAGE_TAG }}
-          path: $HOME/.ops/images/${{ env.IMAGE_TAG }}
+          path: ${{ env.IMAGE_PATH }}
