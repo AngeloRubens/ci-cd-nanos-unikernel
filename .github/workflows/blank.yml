@@ -19,7 +19,10 @@ jobs:
       - name: Install ops (NanoVMs)
         run: |
           curl -L https://ops.city/get.sh | sh
-          sudo mv ops /usr/local/bin/ops
+
+      - name: Add ops to PATH
+        run: |
+          echo "$HOME/.ops/bin" >> $GITHUB_PATH
 
       - name: Verify ops installation
         run: |
