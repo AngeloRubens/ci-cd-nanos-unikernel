@@ -1,0 +1,6 @@
+{
+  "Args": [
+    "/bin/echo",
+    "Hello from Nanos"
+  ]
+}
