@@ -1,6 +1,6 @@
 # 🚀 GitOps Nanos Unikernel Image Pipeline
 
-![GitHub Actions](https://img.shields.io/github/actions/workflow/status/AngeloRubens/ci-cd-nanos-unikernel/build.yml?label=CI&logo=github&style=flat-square)
+![GitHub Actions](https://img.shields.io/github/actions/workflow/status/AngeloRubens/ci-cd-nanos-unikernel/.github/workflows/build.yml?label=CI&logo=github&style=flat-square)
 ![License](https://img.shields.io/github/license/AngeloRubens/ci-cd-nanos-unikernel?style=flat-square)
 ![GitHub stars](https://img.shields.io/github/stars/AngeloRubens/ci-cd-nanos-unikernel?style=flat-square)
 ![GitHub forks](https://img.shields.io/github/forks/AngeloRubens/ci-cd-nanos-unikernel?style=flat-square)
