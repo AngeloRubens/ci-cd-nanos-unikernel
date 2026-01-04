@@ -33,6 +33,8 @@ This repository provides a **GitHub Actions CI pipeline** that builds **immutabl
 
 The result is a **single bootable image** that runs **directly on a hypervisor**.
 
+![Deploy]([https://img.shields.io/badge/Hypervisor-First-purple?style=flat-square](https://github.com/AngeloRubens/ci-cd-nanos-unikernel/blob/main/cloud_deploy_diagram.svg))
+
 ---
 
 ## 🧠 Why Unikernels?
