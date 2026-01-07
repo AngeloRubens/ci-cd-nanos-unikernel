@@ -11,6 +11,7 @@
 "/glassfish/lib/bootstrap",
 "--add-modules",
 "ALL-MODULE-PATH",
+"-server",
 "-XX:+UnlockDiagnosticVMOptions",
 "-XX:NewRatio=2",
 "-Xmx512m",
