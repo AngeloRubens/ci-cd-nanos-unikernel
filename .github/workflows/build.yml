@@ -23,8 +23,7 @@ on:
         default: 'AngeloRubens/AzulJREx64Linux:25.0.1'
         options:
           - 'AngeloRubens/AzulJREx64Linux:25.0.1'
-          - 'AngeloRubens/AzulJREx64Linux:21.0.5'
-          - 'AngeloRubens/AzulJREx64Linux:17.0.13'
+          - 'AngeloRubens/SemeruJREx64Linux:25.0.1'
 
 jobs:
   build:
